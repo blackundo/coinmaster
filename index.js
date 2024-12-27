@@ -12,27 +12,27 @@ let accounts = [];
   if (!fs.existsSync("data")) {
     fs.mkdirSync("data");
   }
-  io.on('connection', client => {
-    client.on('connected', data => {
-      io.emit("connected", true)
-    });
-    client.on('disconnect', () => {
-      /* … */
-    });
-    client.emit("accounts", accounts);
-    client.emit("connected", true)
-  });
-  portfinder.getPortPromise({
-    port: 3001,
-    stopPort: 3099
-  }).then(port => {
+  // io.on('connection', client => {
+  //   client.on('connected', data => {
+  //     io.emit("connected", true)
+  //   });
+  //   client.on('disconnect', () => {
+  //     /* … */
+  //   });
+  //   client.emit("accounts", accounts);
+  //   client.emit("connected", true)
+  // });
+  // portfinder.getPortPromise({
+  //   port: 3001,
+  //   stopPort: 3099
+  // }).then(port => {
 
-    console.log("start socket server at port ", port)
-    server.listen(port);
-  }).catch(err => {
-    console.log("No port available for start up socker server".red);
-    console.log(err)
-  })
+  //   console.log("start socket server at port ", port)
+  //   server.listen(port);
+  // }).catch(err => {
+  //   console.log("No port available for start up socker server".red);
+  //   console.log(err)
+  // })
 
   if (fs.existsSync(accountFile) && myArgs.length > 0) {
     accounts = []
@@ -54,16 +54,16 @@ let accounts = [];
               deviceId: account.DEVICE_ID,
               authToken: account.AUTHTOKEN,
               onData: (d) => {
-                io.emit(d);
+                // io.emit(d);
               }
             });
 
             const balance = await cm.play()
           } catch (err) {
-            console.error(err)
+            // console.error(err)
           }
         }
-        process.exit(0);
+        // process.exit(0);
       });
 
     console.log("Multiple play use account file");
@@ -71,7 +71,7 @@ let accounts = [];
     // await new Promise((resolve) => setTimeout(resolve, 15000))
     var cm = new CoinMaster({
       onData: (d) => {
-        io.emit(d);
+        // io.emit(d);
       }
     });
     //const friend = await cm.getFriend("A_cj7ui7x6m00imtms1r9sxw8b0");

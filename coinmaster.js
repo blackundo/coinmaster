@@ -45,7 +45,7 @@ class CoinMaster {
    * }
    */
   constructor(options) {
-    this.authToken = process.env.AUTH_TOKEN;
+    this.authToken = options.authToken || process.env.AUTH_TOKEN;
     this.syncTarget = options.syncTarget || process.env.SYNC_TARGET || null;
     this.questLevelLimit = parseInt(process.env.QUEST_LEVEL_LIMIT || "6");
     this.allowUpgrade = false;
@@ -920,6 +920,14 @@ class CoinMaster {
     if (res.spins > 0) {
       console.log("Recursive play", res.spins)
       await this.play(true);
+    } else {
+      const checkSpinsInterval = setInterval(async () => {
+        res = await this.getBalance();
+        if (res.spins > 0) {
+          clearInterval(checkSpinsInterval);
+          await this.play(true);
+        }
+      }, 10000); // Check every 20 seconds
     }
     if (this.csvStream) {
       this.csvStream.close();
